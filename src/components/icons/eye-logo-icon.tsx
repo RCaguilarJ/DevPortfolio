@@ -1,0 +1,24 @@
+import React from "react";
+
+export function EyeLogoIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 648 467" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" {...props}>
+      <ellipse cx="324" cy="233.5" rx="324" ry="233.5" fill="#fff" stroke="#000" strokeWidth="5" />
+      <ellipse cx="324" cy="233.5" rx="180" ry="120" fill="#000" />
+      <ellipse cx="324" cy="233.5" rx="100" ry="100" fill="#222" />
+      <ellipse cx="324" cy="233.5" rx="60" ry="60" fill="#222" />
+      <ellipse cx="350" cy="210" rx="12" ry="12" fill="#fff" />
+      <ellipse cx="300" cy="270" rx="14" ry="14" fill="#fff" />
+      <path d="M50 50 Q324 10 598 50" stroke="#000" strokeWidth="5" fill="none" />
+      <path d="M50 417 Q324 457 598 417" stroke="#000" strokeWidth="5" fill="none" />
+      <path d="M100 60 Q324 30 548 60" stroke="#000" strokeWidth="2" fill="none" />
+      <path d="M100 407 Q324 437 548 407" stroke="#000" strokeWidth="2" fill="none" />
+      <path d="M324 20 L324 60" stroke="#000" strokeWidth="4" />
+      <path d="M324 407 L324 447" stroke="#000" strokeWidth="4" />
+      <path d="M70 233.5 L120 233.5" stroke="#000" strokeWidth="4" />
+      <path d="M528 233.5 L578 233.5" stroke="#000" strokeWidth="4" />
+      <path d="M120 100 Q324 233.5 528 100" stroke="#000" strokeWidth="2" fill="none" />
+      <path d="M120 367 Q324 233.5 528 367" stroke="#000" strokeWidth="2" fill="none" />
+    </svg>
+  );
+}
