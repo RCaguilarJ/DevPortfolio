@@ -11,6 +11,20 @@ const IMAGES = {
 		"https://hebbkx1anhila5yf.public.blob.vercel-storage.com/mars-3-knXGkzdjicV39ND36hwbZPUi5vmJcG.png",
 };
 
+const renderLetters = (text: string, prefix: string, shouldAnimate: boolean) =>
+	text.split("").map((letter, index) => (
+		<span
+			key={`${prefix}-${index}`}
+			className={`font-bold text-white ${shouldAnimate ? "letter-rotate" : ""}`}
+			style={{
+				display: "inline-block",
+				transformStyle: "preserve-3d",
+			}}
+		>
+			{letter === " " ? "\u00A0" : letter}
+		</span>
+	));
+
 export default function ParallaxBanner() {
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 	const [needsPermission, setNeedsPermission] = useState(false);
@@ -145,16 +159,16 @@ export default function ParallaxBanner() {
 				style={{
 					transform: `translate3d(${mousePosition.x * 50}px, ${mousePosition.y * 50}px, 0) scale(0.75)`,
 					willChange: "transform",
-					width: "800px",
-					height: "800px",
-					left: "20px",
-					top: "20px",
+					width: "clamp(220px, 42vw, 800px)",
+					aspectRatio: "1 / 1",
+					left: "clamp(-72px, 1.5vw, 24px)",
+					top: "clamp(56px, 9svh, 120px)",
 				}}
 			>
 				<img
 					src={IMAGES.starship}
 					alt="Space station"
-					className="w-full h-full object-contain"
+					className="w-full h-full object-contain object-left-top"
 				/>
 			</div>
 
@@ -183,50 +197,30 @@ export default function ParallaxBanner() {
 					willChange: "transform",
 				}}
 			>
-				<img
-					src={IMAGES.astronaut}
-					alt="Astronaut"
-					className="absolute w-[110%] h-[110%] left-[-5%] top-[calc(-5%+150px)] object-cover"
-				/>
+				<div className="absolute inset-x-0 bottom-[-12svh] flex justify-center px-4 sm:bottom-[-14svh]">
+					<img
+						src={IMAGES.astronaut}
+						alt="Astronaut"
+						className="h-auto w-[clamp(560px,96vw,1680px)] max-w-none object-contain"
+					/>
+				</div>
 			</div>
 
 			<div
-				className={`absolute inset-0 flex items-center justify-center z-40 px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8 pointer-events-none ${shouldAnimate ? "zoom-layer-text" : ""}`}
+				className={`absolute inset-0 z-50 flex items-center justify-center px-4 pt-[6svh] pointer-events-none sm:px-6 md:px-8 ${shouldAnimate ? "zoom-layer-text" : ""}`}
 				style={{
 					transform: `translate3d(${mousePosition.x * 140}px, ${mousePosition.y * 140}px, 0)`,
 					willChange: "transform",
 					perspective: "1000px",
 				}}
 			>
-				<div className="flex w-full max-w-[100vw] justify-center items-center gap-2 xs:gap-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 text-[18px] xs:text-[24px] sm:text-[32px] md:text-[45px] lg:text-[60px] xl:text-[80px] z-40">
-					<div className="flex flex-wrap justify-end max-w-[38%] xs:max-w-[40%] sm:max-w-[42%]">
-						{"FULL STACK".split("").map((letter, index) => (
-							<span
-								key={`fs-${index}`}
-								className={`font-bold text-white ${shouldAnimate ? "letter-rotate" : ""}`}
-								style={{
-									display: "inline-block",
-									transformStyle: "preserve-3d",
-								}}
-							>
-								{letter === " " ? "\u00A0" : letter}
-							</span>
-						))}
+				<div className="banner-copy z-40">
+					<div className="banner-copy__word banner-copy__word--left">
+						{renderLetters("FULL STACK", "fs", shouldAnimate)}
 					</div>
-					<div className="flex-shrink-0 w-[16%] xs:w-[14%] sm:w-[12%] md:w-[10%] lg:w-[8%] xl:w-[6%] max-w-[80px] xs:max-w-[100px] sm:max-w-[120px] md:max-w-[160px] lg:max-w-[200px]"></div>
-					<div className="flex flex-wrap justify-start max-w-[38%] xs:max-w-[40%] sm:max-w-[42%]">
-						{"DEVELOPER".split("").map((letter, index) => (
-							<span
-								key={`dev-${index}`}
-								className={`font-bold text-white ${shouldAnimate ? "letter-rotate" : ""}`}
-								style={{
-									display: "inline-block",
-									transformStyle: "preserve-3d",
-								}}
-							>
-								{letter === " " ? "\u00A0" : letter}
-							</span>
-						))}
+					<div className="banner-copy__gap" />
+					<div className="banner-copy__word banner-copy__word--right">
+						{renderLetters("DEVELOPER", "dev", shouldAnimate)}
 					</div>
 				</div>
 			</div>
@@ -246,6 +240,42 @@ export default function ParallaxBanner() {
         }
         .zoom-layer-text {
           animation: zoomOutText 8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .banner-copy {
+          width: min(100%, 1480px);
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) clamp(120px, 18vw, 320px) minmax(0, 1fr);
+          align-items: center;
+          gap: clamp(10px, 1.5vw, 28px);
+          font-size: clamp(28px, 5.8vw, 96px);
+          line-height: 0.95;
+          letter-spacing: -0.04em;
+          text-transform: uppercase;
+        }
+
+        .banner-copy__word {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0;
+          text-wrap: balance;
+          text-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+        }
+
+        .banner-copy__word--left {
+          justify-content: flex-end;
+          text-align: right;
+        }
+
+        .banner-copy__word--right {
+          justify-content: flex-start;
+          text-align: left;
+        }
+
+        .banner-copy__gap {
+          width: 100%;
+          height: 100%;
         }
 
         @keyframes zoomOut1 {
@@ -367,6 +397,35 @@ export default function ParallaxBanner() {
           }
           .parallax-text-small {
             font-size: clamp(28px, 6vw, 54px);
+          }
+        }
+
+        @media (max-width: 1023px) {
+          .banner-copy {
+            grid-template-columns: minmax(0, 1fr) clamp(90px, 12vw, 160px) minmax(0, 1fr);
+            font-size: clamp(24px, 6.5vw, 64px);
+          }
+        }
+
+        @media (max-width: 767px) {
+          .banner-copy {
+            width: min(100%, 560px);
+            grid-template-columns: 1fr;
+            gap: 0.35rem;
+            font-size: clamp(34px, 10vw, 64px);
+            line-height: 0.9;
+            text-align: center;
+          }
+
+          .banner-copy__word,
+          .banner-copy__word--left,
+          .banner-copy__word--right {
+            justify-content: center;
+            text-align: center;
+          }
+
+          .banner-copy__gap {
+            display: none;
           }
         }
         
