@@ -11,19 +11,23 @@ const IMAGES = {
 		"https://hebbkx1anhila5yf.public.blob.vercel-storage.com/mars-3-knXGkzdjicV39ND36hwbZPUi5vmJcG.png",
 };
 
-const renderLetters = (text: string, prefix: string, shouldAnimate: boolean) =>
-	text.split("").map((letter, index) => (
-		<span
-			key={`${prefix}-${index}`}
-			className={`font-bold text-white ${shouldAnimate ? "letter-rotate" : ""}`}
-			style={{
-				display: "inline-block",
-				transformStyle: "preserve-3d",
-			}}
-		>
-			{letter === " " ? "\u00A0" : letter}
-		</span>
-	));
+const renderBannerChunk = (
+	text: string,
+	prefix: string,
+	shouldAnimate: boolean,
+) => (
+	<span
+		key={prefix}
+		className={`font-bold text-white ${shouldAnimate ? "letter-rotate" : ""}`}
+		style={{
+			display: "inline-block",
+			transformStyle: "preserve-3d",
+			whiteSpace: "nowrap",
+		}}
+	>
+		{text}
+	</span>
+);
 
 export default function ParallaxBanner() {
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -216,11 +220,11 @@ export default function ParallaxBanner() {
 			>
 				<div className="banner-copy z-40">
 					<div className="banner-copy__word banner-copy__word--left">
-						{renderLetters("FULL STACK", "fs", shouldAnimate)}
+						{renderBannerChunk("FULL STACK", "fs", shouldAnimate)}
 					</div>
 					<div className="banner-copy__gap" />
 					<div className="banner-copy__word banner-copy__word--right">
-						{renderLetters("DEVELOPER", "dev", shouldAnimate)}
+						{renderBannerChunk("DEVELOPER", "dev", shouldAnimate)}
 					</div>
 				</div>
 			</div>
@@ -256,10 +260,10 @@ export default function ParallaxBanner() {
 
         .banner-copy__word {
           display: flex;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
           align-items: center;
           gap: 0;
-          text-wrap: balance;
+          white-space: nowrap;
           text-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
         }
 
