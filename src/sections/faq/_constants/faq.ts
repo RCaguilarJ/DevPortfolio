@@ -35,43 +35,25 @@ export const faqItems: FaqItem[] = [
 
 export const faqItemsMobile: FaqItem[] = [
 	{
-		question: "Que proyectos van aqui?",
+		question: "Lo que más me gusta hacer",
 		answer:
-			"Describe el tipo de trabajo que te encanta hacer y para quien es, asi nuevos leads saben que estan en el lugar correcto.",
+			"Enfrentarme a nuevos desafíos y retarme a mí mismo para mejorar y conocer habilidades nuevas en algo que sea completamente desconocido para mí.",
 	},
 	{
-		question: "Como es el proceso?",
+		question: "Cómo me gusta trabajar?",
 		answer:
-			"Resume tu flujo a alto nivel: descubrimiento, construccion, lanzamiento, para mostrar lo organizado que eres.",
+			"Siempre me gusta que me planteen el proyecto y en el tiempo estimado en el que esperan la entrega para hacer mi calendario ya sea en trello o JIRA para así poder entregar antes de lo planeado de manera organizada.",
 	},
 	{
-		question: "Que tan rapido se puede entregar?",
+		question: "Qué tan rápido puedo entregar?",
 		answer:
-			"Da un rango aproximado para trabajos comunes y menciona que hace que los tiempos suban o bajen.",
+			"Mientras mis compañeros vayamos a la par, en las fechas estimadas. Si un compañero se atrasa y eh avanzado en lo mío, con gusto lo ayudo si está en mis manos para que el barco no se hunda. En caso de que el proyecto sea completamente nuevo, me gusta tener una reunión para entender el proyecto y así poder entregar un tiempo estimado de entrega.",
 	},
+	
 	{
-		question: "Como colaboramos?",
+		question: "Qué herramientas uso?",
 		answer:
-			"Lista las herramientas que prefieres y si te integras a equipos existentes, manejas comunicacion asincrona o lideras el proyecto.",
+			"Para colaboración, Trello, JIRA y ASANA.",
 	},
-	{
-		question: "Que herramientas usas?",
-		answer:
-			"Comparte tu stack principal o plataformas. La gente que busca un especialista lo agradecera.",
-	},
-	{
-		question: "Estas disponible?",
-		answer:
-			"Diles si estas abierto a nuevo trabajo ahora, agendando el proximo trimestre o tomando proyectos limitados.",
-	},
-	{
-		question: "Como cobras proyectos?",
-		answer:
-			"Menciona tu modelo preferido (alcance fijo, por sprint o retainers) e invita a pedir una cotizacion.",
-	},
-	{
-		question: "Necesitas algo mas?",
-		answer:
-			"Recuerda que siempre pueden escribirte mediante el formulario de contacto para cualquier cosa no cubierta aqui.",
-	},
+
 ];
