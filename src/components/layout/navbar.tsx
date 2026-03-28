@@ -1,5 +1,6 @@
 import { useGSAP } from "@gsap/react";
 import { useEffect, useId, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { EyeLogoIcon } from "@/components/icons/eye-logo-icon";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -20,7 +21,7 @@ const NAV_LINKS: Array<{ label: string; target: string; external?: boolean }> =
 		{ label: "Proyectos", target: "#works" },
 		{ label: "Galeria", target: "#showcase" },
 		{ label: "Certificados", target: "/certificados", external: true },
-		{ label: "Testimonios", target: "#testimonials" },
+		{ label: "Testimonios", target: "#testimonios" },
 		{ label: "Preguntas", target: "#faq" },
 	];
 
@@ -45,6 +46,8 @@ export function Navbar() {
 	const lineThreeRef = useRef<HTMLSpanElement>(null);
 	const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 	const { scrollTo } = useLenis();
+	const location = useLocation();
+	const navigate = useNavigate();
 	const mobileMenuId = useId();
 
 	const toggleTl = useRef<gsap.core.Timeline | null>(null);
@@ -249,12 +252,41 @@ export function Navbar() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (location.pathname !== "/" || !location.hash) return;
+
+		const frame = window.requestAnimationFrame(() => {
+			scrollTo(location.hash);
+		});
+
+		return () => {
+			window.cancelAnimationFrame(frame);
+		};
+	}, [location.hash, location.pathname, scrollTo]);
+
+	const goToTarget = (target: string) => {
+		if (target.startsWith("#")) {
+			if (location.pathname === "/") {
+				scrollTo(target);
+				window.history.replaceState(null, "", target);
+				return;
+			}
+
+			navigate(`/${target}`);
+			return;
+		}
+
+		if (location.pathname !== target) {
+			navigate(target);
+		}
+	};
+
 	const handleScroll = (link: (typeof NAV_LINKS)[number]) => {
 		setMobileMenuOpen(false);
 		if ("external" in link && link.external) {
-			window.location.href = link.target;
+			goToTarget(link.target);
 		} else {
-			scrollTo(link.target);
+			goToTarget(link.target);
 		}
 	};
 
@@ -275,8 +307,8 @@ export function Navbar() {
 				<Button
 					variant="ghost"
 					size="sm"
-					className="p-0 text-base font-semibold text-foreground hover:bg-transparent"
-					onClick={() => scrollTo("#hero")}
+					className="p-0 text-lg font-semibold text-foreground hover:bg-transparent md:text-xl"
+					onClick={() => goToTarget("#hero")}
 					role="menuitem"
 				>
 					<div className="flex items-center gap-2">
@@ -295,7 +327,7 @@ export function Navbar() {
 							key={link.target}
 							variant="ghost"
 							size="sm"
-							className="text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-transparent"
+							className="text-[15px] leading-none font-medium text-foreground/80 hover:text-foreground hover:bg-transparent md:text-[18px] lg:text-[22px] xl:text-[30px]"
 							onClick={() => handleScroll(link)}
 							role="menuitem"
 						>
@@ -310,8 +342,8 @@ export function Navbar() {
 					<Button
 						variant="default"
 						size="sm"
-						className="text-sm font-semibold"
-						onClick={() => scrollTo("#contact")}
+						className="border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110 md:text-lg"
+						onClick={() => goToTarget("#footer")}
 						role="menuitem"
 					>
 						Contacto
@@ -371,7 +403,7 @@ export function Navbar() {
 							key={link.target}
 							variant="ghost"
 							size="sm"
-							className="justify-start px-0 text-sm font-medium text-foreground/80 hover:text-foreground"
+							className="justify-start px-0 text-base font-medium text-foreground/80 hover:text-foreground"
 							onClick={() => handleScroll(link)}
 							role="menuitem"
 						>
@@ -381,8 +413,8 @@ export function Navbar() {
 					<Button
 						variant="default"
 						size="sm"
-						className="mt-2 text-sm"
-						onClick={() => scrollTo("#contact")}
+						className="mt-2 border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110"
+						onClick={() => goToTarget("#footer")}
 						role="menuitem"
 					>
 						Contacto

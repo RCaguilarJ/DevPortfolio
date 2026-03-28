@@ -16,4 +16,5 @@ export const Icons = {
 	Search: RadixIcons.MagnifyingGlassIcon,
 	DotsHorizontal: RadixIcons.DotsHorizontalIcon,
 	ViewVertical: RadixIcons.ViewVerticalIcon,
+	ArrowRight: RadixIcons.ArrowRightIcon,
 };

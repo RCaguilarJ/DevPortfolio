@@ -6,6 +6,7 @@ import { NotFound } from "@/components/not-found";
 import BlogPostPage from "@/pages/BlogPostPage";
 import CertificadosPage from "@/pages/certificados/certificados";
 import HomePage from "@/pages/HomePage";
+import TodosProyectosPage from "@/pages/todos-proyectos/todos-proyectos";
 
 export default function App() {
 	return (
@@ -14,6 +15,7 @@ export default function App() {
 			<Routes>
 				<Route path="/" element={<HomePage />} />
 				<Route path="/certificados" element={<CertificadosPage />} />
+				<Route path="/proyectos" element={<TodosProyectosPage />} />
 				<Route path="/blog/:slug" element={<BlogPostPage />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>

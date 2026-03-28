@@ -42,9 +42,9 @@ export const footerLinks: FooterLink[] = [
 	{ label: "Servicios", href: "#services" },
 	{ label: "Proyectos", href: "#works" },
 	{ label: "Galeria", href: "#showcase" },
-	{ label: "Testimonios", href: "#testimonials" },
+	{ label: "Certificados", href: "/certificados" },
+	{ label: "Testimonios", href: "#testimonios" },
 	{ label: "Preguntas", href: "#faq" },
-	{ label: "Blog", href: "#blog" },
 ];
 
 export const footerSocialLinks: FooterSocialLink[] = [

@@ -1,6 +1,3 @@
-import { Link } from "react-router";
-import { EyeLogoIcon } from "@/components/icons/eye-logo-icon";
-import { Button } from "@/components/ui/button";
 import { Icons } from "@/lib/icons";
 import { MatrixRain } from "@/sections/matrix-rain/matrix-rain";
 
@@ -21,25 +18,6 @@ export default function CertificadosPage() {
 			</div>
 
 			<div className="relative z-10 min-h-screen">
-				<nav className="fixed top-2 inset-x-0 z-50 flex justify-center px-2 md:px-4">
-					<div className="relative flex w-full items-center justify-between rounded-lg py-1.5 px-4 bg-card/75 border border-border backdrop-blur-16">
-						<Link
-							to="/"
-							className="flex items-center gap-2 text-foreground hover:text-foreground/80 transition-colors"
-						>
-							<EyeLogoIcon className="size-4" />
-							<span className="text-base font-semibold">Carlos Aguilar</span>
-						</Link>
-
-						<Link
-							to="/"
-							className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-						>
-							Volver al inicio
-						</Link>
-					</div>
-				</nav>
-
 				<div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-12">
 					<h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-3 sm:mb-4 text-white">
 						Certificados

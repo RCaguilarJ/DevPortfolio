@@ -18,6 +18,7 @@ const LATIN_CHARS =
 const KATAKANA_CHARS =
 	"ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
 const COLUMN_SPACING = 14;
+const RAIN_SPEED_MULTIPLIER = 1.9;
 
 const getRandomChar = (katakanaRatio: number): string => {
 	return Math.random() < katakanaRatio
@@ -26,7 +27,8 @@ const getRandomChar = (katakanaRatio: number): string => {
 };
 
 const getRandomLength = (): number => 5 + Math.floor(Math.random() * 25);
-const getRandomSpeed = (): number => 0.5 + Math.random() * 2;
+const getRandomSpeed = (): number =>
+	(0.5 + Math.random() * 2) * RAIN_SPEED_MULTIPLIER;
 const getRandomKatakanaRatio = (): number => 0.6 + Math.random() * 0.3;
 
 interface MatrixRainProps {
