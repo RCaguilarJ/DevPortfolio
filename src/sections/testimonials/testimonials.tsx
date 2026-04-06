@@ -36,7 +36,7 @@ export default function Testimonials() {
 			badgeText="Referencias"
 			badgeIcon={<CheckIcon aria-hidden="true" className="size-3.5" />}
 		>
-		{columns.map((column, columnIndex) => {
+			{columns.map((column, columnIndex) => {
 				const animationDuration =
 					animationDurations[columnIndex] ??
 					animationDurations[animationDurations.length - 1];
@@ -44,36 +44,36 @@ export default function Testimonials() {
 					"--duration": animationDuration,
 				} as CSSProperties;
 
-			return (
-				<div
-					key={
-						columnKeys[columnIndex] ?? `testimonials-column-${columnIndex}`
-					}
-					className={cn(
-						"group relative h-112 overflow-hidden p-2",
-						columnVisibility[columnIndex] ?? fallbackVisibility,
-					)}
-				>
-					<Marquee
-						vertical
-						className="h-full [--gap:1rem]"
-						style={marqueeStyle}
+				return (
+					<div
+						key={
+							columnKeys[columnIndex] ?? `testimonials-column-${columnIndex}`
+						}
+						className={cn(
+							"group relative h-112 overflow-hidden p-2",
+							columnVisibility[columnIndex] ?? fallbackVisibility,
+						)}
 					>
-						{column.map((testimonial, testimonialIndex) => (
-							<TestimonialCard
-								key={`${testimonial.author}-${columnIndex}-${testimonialIndex}`}
-								content={testimonial.content}
-								author={testimonial.author}
-								position={testimonial.position}
-								imageSrc={testimonial.imageSrc}
-							/>
-						))}
-					</Marquee>
-					<div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-background via-background/80 to-transparent" />
-					<div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-background via-background/80 to-transparent" />
-				</div>
-			);
-		})}
+						<Marquee
+							vertical
+							className="h-full [--gap:1rem]"
+							style={marqueeStyle}
+						>
+							{column.map((testimonial, testimonialIndex) => (
+								<TestimonialCard
+									key={`${testimonial.author}-${columnIndex}-${testimonialIndex}`}
+									content={testimonial.content}
+									author={testimonial.author}
+									position={testimonial.position}
+									imageSrc={testimonial.imageSrc}
+								/>
+							))}
+						</Marquee>
+						<div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-background via-background/80 to-transparent" />
+						<div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-background via-background/80 to-transparent" />
+					</div>
+				);
+			})}
 		</Section>
 	);
 }

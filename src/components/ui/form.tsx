@@ -1,6 +1,14 @@
 "use client";
 
-import React, { createContext, useContext, useId } from "react";
+import {
+	cloneElement,
+	createContext,
+	isValidElement,
+	type ReactElement,
+	type ReactNode,
+	useContext,
+	useId,
+} from "react";
 import { cn } from "@/lib/utils";
 
 interface FormFieldContextValue {
@@ -21,13 +29,13 @@ const useFormField = () => {
 };
 
 export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
-	children: React.ReactNode;
+	children: ReactNode;
 	className?: string;
 	onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export interface FormFieldProps {
-	children: React.ReactNode;
+	children: ReactNode;
 	name: string;
 	error?: string;
 	description?: string;
@@ -36,93 +44,87 @@ export interface FormFieldProps {
 
 export interface FormLabelProps
 	extends React.LabelHTMLAttributes<HTMLLabelElement> {
-	children: React.ReactNode;
+	children: ReactNode;
 	className?: string;
 	required?: boolean;
 }
 
 export interface FormControlProps {
-	children: React.ReactNode;
+	children: ReactNode;
 	className?: string;
 }
 
 export interface FormActionsProps {
-	children: React.ReactNode;
+	children: ReactNode;
 	align?: "left" | "center" | "right";
 	className?: string;
 }
 
 export interface FormDescriptionProps
 	extends React.HTMLAttributes<HTMLParagraphElement> {
-	children: React.ReactNode;
+	children: ReactNode;
 	className?: string;
 }
 
 export interface FormMessageProps
 	extends React.HTMLAttributes<HTMLParagraphElement> {
-	children: React.ReactNode;
+	children: ReactNode;
 	className?: string;
 }
 
-export const Form: React.FC<FormProps> = ({
+export const Form = ({
 	children,
 	className,
 	onSubmit,
 	...props
-}) => {
+}: FormProps) => {
 	return (
-		<form
-			className={cn("space-y-4", className)}
-			onSubmit={onSubmit}
-			{...props}
-		>
+		<form className={cn("space-y-4", className)} onSubmit={onSubmit} {...props}>
 			{children}
 		</form>
 	);
 };
 
-export const FormField: React.FC<FormFieldProps> = ({
+export const FormField = ({
 	children,
 	name,
 	error,
 	description,
 	className,
-}) => {
-	const reactId = useId();
-	const id = reactId;
+}: FormFieldProps) => {
+	const id = useId();
 	const describedById = `${id}-description`;
 	const errorId = `${id}-error`;
 
 	return (
-		<FormFieldContext.Provider
-			value={{ id, name, error, description }}
-		>
+		<FormFieldContext.Provider value={{ id, name, error, description }}>
 			<div className={cn("space-y-2", className)}>
 				{children}
-				{description && (
-					<p
-						id={describedById}
-						className="text-[0.8rem] text-muted-foreground"
-					>
+				{description ? (
+					<p id={describedById} className="text-[0.8rem] text-muted-foreground">
 						{description}
 					</p>
-				)}
-				{error && (
-					<p id={errorId} className="text-[0.8rem] font-medium text-destructive">
+				) : null}
+				{error ? (
+					<p
+						id={errorId}
+						className="text-[0.8rem] font-medium text-destructive"
+					>
 						{error}
 					</p>
-				)}
+				) : null}
 			</div>
 		</FormFieldContext.Provider>
 	);
+};
 
-export const FormLabel: React.FC<FormLabelProps> = ({
+export const FormLabel = ({
 	children,
 	className,
 	required,
 	...props
-}) => {
-	const { id, name, error } = useFormField();
+}: FormLabelProps) => {
+	const { id, error } = useFormField();
 
 	return (
 		<label
@@ -135,15 +137,12 @@ export const FormLabel: React.FC<FormLabelProps> = ({
 			{...props}
 		>
 			{children}
-			{required && <span className="text-destructive ml-1">*</span>}
+			{required ? <span className="ml-1 text-destructive">*</span> : null}
 		</label>
 	);
 };
 
-export const FormControl: React.FC<FormControlProps> = ({
-	children,
-	className,
-}) => {
+export const FormControl = ({ children, className }: FormControlProps) => {
 	const { id, name, error, description } = useFormField();
 	const describedById = `${id}-description`;
 	const errorId = `${id}-error`;
@@ -156,28 +155,37 @@ export const FormControl: React.FC<FormControlProps> = ({
 
 	return (
 		<div className={className}>
-			{React.isValidElement(children)
-				? React.cloneElement(children as React.ReactElement<{
-						id?: string;
-						name?: string;
-						"aria-describedby"?: string;
-						"aria-invalid"?: boolean;
-				  }>, {
+			{isValidElement(children)
+				? cloneFormControl(children, {
 						id,
 						name,
 						"aria-describedby": ariaDescribedBy || undefined,
 						"aria-invalid": error ? true : undefined,
-				  })
+					})
 				: children}
 		</div>
 	);
 };
 
-export const FormActions: React.FC<FormActionsProps> = ({
+type FormControlElementProps = {
+	id?: string;
+	name?: string;
+	"aria-describedby"?: string;
+	"aria-invalid"?: boolean;
+};
+
+const cloneFormControl = (
+	element: ReactElement<FormControlElementProps>,
+	props: FormControlElementProps,
+) => {
+	return cloneElement(element, props);
+};
+
+export const FormActions = ({
 	children,
 	align = "right",
 	className,
-}) => {
+}: FormActionsProps) => {
 	return (
 		<div
 			className={cn(
@@ -193,16 +201,15 @@ export const FormActions: React.FC<FormActionsProps> = ({
 	);
 };
 
-export const FormDescription: React.FC<FormDescriptionProps> = ({
+export const FormDescription = ({
 	children,
 	className,
-}) => {
+}: FormDescriptionProps) => {
 	const { id } = useFormField();
-	const describedById = `${id}-description`;
 
 	return (
 		<p
-			id={describedById}
+			id={`${id}-description`}
 			className={cn("text-[0.8rem] text-muted-foreground", className)}
 		>
 			{children}
@@ -210,18 +217,14 @@ export const FormDescription: React.FC<FormDescriptionProps> = ({
 	);
 };
 
-export const FormMessage: React.FC<FormMessageProps> = ({
-	children,
-	className,
-}) => {
+export const FormMessage = ({ children, className }: FormMessageProps) => {
 	const { id, error } = useFormField();
-	const errorId = `${id}-error`;
 
 	if (!children && !error) return null;
 
 	return (
 		<p
-			id={errorId}
+			id={`${id}-error`}
 			className={cn(
 				"text-[0.8rem] font-medium",
 				error ? "text-destructive" : "text-muted-foreground",

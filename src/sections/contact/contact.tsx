@@ -23,6 +23,7 @@ const WhatsAppIcon = (props: SVGProps<SVGSVGElement>) => (
 		fill="currentColor"
 		{...props}
 	>
+		<title>WhatsApp</title>
 		<path d="M19.05 4.94A9.83 9.83 0 0 0 12.03 2C6.6 2 2.18 6.42 2.18 11.85c0 1.74.45 3.44 1.31 4.95L2 22l5.36-1.4a9.8 9.8 0 0 0 4.67 1.19h.01c5.43 0 9.85-4.42 9.85-9.85a9.78 9.78 0 0 0-2.84-7ZM12.04 20.1h-.01a8.14 8.14 0 0 1-4.15-1.13l-.3-.18-3.18.83.85-3.1-.2-.32a8.12 8.12 0 0 1-1.25-4.35c0-4.5 3.66-8.15 8.16-8.15 2.17 0 4.21.85 5.74 2.38a8.08 8.08 0 0 1 2.38 5.76c0 4.49-3.66 8.15-8.14 8.15Zm4.47-6.11c-.24-.12-1.4-.69-1.62-.77-.22-.08-.37-.12-.53.12s-.61.77-.75.93c-.14.16-.28.18-.52.06-.24-.12-1-.37-1.91-1.18-.7-.63-1.18-1.4-1.32-1.63-.14-.24-.01-.36.1-.48.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.53-1.28-.73-1.75-.19-.46-.38-.4-.53-.41h-.45c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.31.98 2.47c.12.16 1.69 2.58 4.09 3.62.57.25 1.02.4 1.37.51.58.18 1.1.15 1.52.09.46-.07 1.4-.57 1.6-1.12.2-.55.2-1.02.14-1.12-.06-.1-.22-.16-.46-.28Z" />
 	</svg>
 );
@@ -123,7 +124,7 @@ export default function Contact() {
 
 			<div className="px-4 py-8 md:px-8 md:py-10">
 				<div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-2 xl:grid-cols-4">
-					{CONTACT_CHANNELS.map(({ label, value, href, Icon, iconClassName }) => (
+					{CONTACT_CHANNELS.map(({ label, href, Icon, iconClassName }) => (
 						<a
 							key={label}
 							href={href}
@@ -134,7 +135,10 @@ export default function Contact() {
 							<div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-white/18 to-transparent" />
 							<div className="flex items-start justify-between gap-4">
 								<span className="flex size-12 items-center justify-center rounded-2xl border border-white/8 bg-white/4 shadow-inner">
-									<Icon className={cn("size-5", iconClassName)} aria-hidden="true" />
+									<Icon
+										className={cn("size-5", iconClassName)}
+										aria-hidden="true"
+									/>
 								</span>
 								<ArrowTopRightIcon className="mt-1 size-4 text-slate-400 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-slate-50" />
 							</div>
@@ -142,9 +146,6 @@ export default function Contact() {
 							<div className="mt-14 flex flex-col gap-2">
 								<p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">
 									{label}
-								</p>
-								<p className="text-xl font-semibold leading-tight text-slate-50">
-									{value}
 								</p>
 							</div>
 						</a>

@@ -3,14 +3,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Drop {
+	id: string;
 	x: number;
 	y: number;
 	speed: number;
-	chars: string[];
+	chars: MatrixChar[];
 	changeFrequency: number;
 	glowIntensity: number;
 	fadeLength: number;
 	katakanaRatio: number;
+}
+
+interface MatrixChar {
+	id: string;
+	value: string;
 }
 
 const LATIN_CHARS =
@@ -30,6 +36,13 @@ const getRandomLength = (): number => 5 + Math.floor(Math.random() * 25);
 const getRandomSpeed = (): number =>
 	(0.5 + Math.random() * 2) * RAIN_SPEED_MULTIPLIER;
 const getRandomKatakanaRatio = (): number => 0.6 + Math.random() * 0.3;
+const createMatrixId = () =>
+	`${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+const createRandomChars = (katakanaRatio: number): MatrixChar[] =>
+	Array.from({ length: getRandomLength() }, () => ({
+		id: createMatrixId(),
+		value: getRandomChar(katakanaRatio),
+	}));
 
 interface MatrixRainProps {
 	className?: string;
@@ -48,12 +61,11 @@ export function MatrixRain({ className = "" }: MatrixRainProps) {
 		const newDrops: Drop[] = Array.from({ length: numColumns }, () => {
 			const katakanaRatio = getRandomKatakanaRatio();
 			return {
+				id: createMatrixId(),
 				x: Math.random() * width,
 				y: -Math.random() * height * 2,
 				speed: getRandomSpeed(),
-				chars: Array.from({ length: getRandomLength() }, () =>
-					getRandomChar(katakanaRatio),
-				),
+				chars: createRandomChars(katakanaRatio),
 				changeFrequency: Math.random() * 0.15,
 				glowIntensity: 0.5 + Math.random() * 0.5,
 				fadeLength: 0.2 + Math.random() * 0.3,
@@ -100,9 +112,7 @@ export function MatrixRain({ className = "" }: MatrixRainProps) {
 							chars:
 								Math.random() > 0.8
 									? drop.chars
-									: Array.from({ length: getRandomLength() }, () =>
-											getRandomChar(newKatakanaRatio),
-										),
+									: createRandomChars(newKatakanaRatio),
 							fadeLength: 0.2 + Math.random() * 0.3,
 							katakanaRatio: newKatakanaRatio,
 						};
@@ -110,7 +120,7 @@ export function MatrixRain({ className = "" }: MatrixRainProps) {
 
 					const newChars = drop.chars.map((char) =>
 						Math.random() < drop.changeFrequency
-							? getRandomChar(drop.katakanaRatio)
+							? { ...char, value: getRandomChar(drop.katakanaRatio) }
 							: char,
 					);
 
@@ -134,7 +144,7 @@ export function MatrixRain({ className = "" }: MatrixRainProps) {
 					"'Courier New', monospace, 'MS Gothic', 'Meiryo', sans-serif",
 			}}
 		>
-			{drops.map((drop, dropIndex) => {
+			{drops.map((drop) => {
 				const columnBottomY = drop.y + drop.chars.length * 20;
 				const fadeStartY = dimensions.height * (1 - drop.fadeLength);
 				const fadeOpacity =
@@ -149,7 +159,7 @@ export function MatrixRain({ className = "" }: MatrixRainProps) {
 
 				return (
 					<div
-						key={dropIndex}
+						key={drop.id}
 						className="absolute font-mono text-center"
 						style={{
 							left: `${drop.x}px`,
@@ -166,7 +176,7 @@ export function MatrixRain({ className = "" }: MatrixRainProps) {
 
 							return (
 								<div
-									key={charIndex}
+									key={char.id}
 									className={`text-lg ${isLastChar ? "text-green-300" : "text-green-500"}`}
 									style={{
 										opacity: Math.min(1, charOpacity),
@@ -177,7 +187,7 @@ export function MatrixRain({ className = "" }: MatrixRainProps) {
 												: "none",
 									}}
 								>
-									{char}
+									{char.value}
 								</div>
 							);
 						})}

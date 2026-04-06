@@ -1,6 +1,6 @@
-import { Suspense, useEffect, useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera, useGLTF } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +19,7 @@ function MovingStars() {
 			});
 		}
 		return temp;
-	}, [count]);
+	}, []);
 
 	useFrame((state) => {
 		if (!mesh.current) return;

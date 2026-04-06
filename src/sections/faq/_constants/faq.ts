@@ -14,7 +14,7 @@ export const faqItems: FaqItem[] = [
 		answer:
 			"Comienzo por escuchar al cliente / proyect manager respecto al proyecto (si es comenzarlo desde cero) para después, impletementar un diagrama de flujo visual en donde asigne qué tecnologías y herramientas serían las más óptimas para llevarlo a cabo. Gestionar tiempos y (o) costos es fundamental del primer punto para posteriormente entregar una cotización y/o tiempo estimado de entrega de la primera etapa o entrega final.",
 	},
-		{
+	{
 		question: "Mi colaboración",
 		answer:
 			"Al no ser introvertido, es fácil de que me adapte a un equipo ya integrado para llevar un ambiente laboral saludable en el cual todos nos sintamos cómodoa e incluídos en el proyecto o empleo. Me siento cómodo trabajando con herramientas como Jira o Trello para llevar una comunicación constante y entrega de tareas asignadas para llevar un control de la estimacipon de las fechas de entrega.",
@@ -29,8 +29,6 @@ export const faqItems: FaqItem[] = [
 		answer:
 			"Dependiendo en el momento que se comuniquen conmigo. Actualmente trabajo en una empresa como tal pero busco nuevos desafíos y retos que me hagan superarme como desarrollador y como persona",
 	},
-	
-	
 ];
 
 export const faqItemsMobile: FaqItem[] = [
@@ -49,11 +47,9 @@ export const faqItemsMobile: FaqItem[] = [
 		answer:
 			"Mientras mis compañeros vayamos a la par, en las fechas estimadas. Si un compañero se atrasa y eh avanzado en lo mío, con gusto lo ayudo si está en mis manos para que el barco no se hunda. En caso de que el proyecto sea completamente nuevo, me gusta tener una reunión para entender el proyecto y así poder entregar un tiempo estimado de entrega.",
 	},
-	
+
 	{
 		question: "Qué herramientas uso?",
-		answer:
-			"Para colaboración, Trello, JIRA y ASANA.",
+		answer: "Para colaboración, Trello, JIRA y ASANA.",
 	},
-
 ];

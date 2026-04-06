@@ -38,9 +38,9 @@ export function Navbar() {
 	);
 	const [isNavbarElevated, setIsNavbarElevated] = useState(false);
 	const navbarRef = useRef<HTMLDivElement>(null);
-	const menuRef = useRef<HTMLDivElement>(null);
 	const menuContentRef = useRef<HTMLDivElement>(null);
 	const toggleButtonRef = useRef<HTMLButtonElement>(null);
+	const firstMobileActionRef = useRef<HTMLButtonElement>(null);
 	const lineOneRef = useRef<HTMLSpanElement>(null);
 	const lineTwoRef = useRef<HTMLSpanElement>(null);
 	const lineThreeRef = useRef<HTMLSpanElement>(null);
@@ -66,30 +66,6 @@ export function Navbar() {
 			window.removeEventListener("resize", updateViewport);
 		};
 	}, []);
-
-	useEffect(() => {
-		const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
-			if (!mobileMenuOpen || !menuRef.current || !toggleButtonRef.current) {
-				return;
-			}
-
-			const target = event.target as Node;
-			if (
-				!menuRef.current.contains(target) &&
-				!toggleButtonRef.current.contains(target)
-			) {
-				setMobileMenuOpen(false);
-			}
-		};
-
-		document.addEventListener("click", handleOutsideClick);
-		document.addEventListener("touchend", handleOutsideClick);
-
-		return () => {
-			document.removeEventListener("click", handleOutsideClick);
-			document.removeEventListener("touchend", handleOutsideClick);
-		};
-	}, [mobileMenuOpen]);
 
 	useGSAP(
 		() => {
@@ -147,6 +123,9 @@ export function Navbar() {
 				onStart: () => {
 					menu.style.display = "flex";
 				},
+				onReverseComplete: () => {
+					menu.style.display = "none";
+				},
 			});
 
 			menuTl.current = tl;
@@ -170,6 +149,49 @@ export function Navbar() {
 			mTl?.reverse();
 		}
 	}, [mobileMenuOpen]);
+
+	useEffect(() => {
+		if (!isMobile && mobileMenuOpen) {
+			setMobileMenuOpen(false);
+		}
+	}, [isMobile, mobileMenuOpen]);
+
+	useEffect(() => {
+		if (!mobileMenuOpen) return;
+
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				setMobileMenuOpen(false);
+				toggleButtonRef.current?.focus();
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [mobileMenuOpen]);
+
+	useEffect(() => {
+		if (!mobileMenuOpen || !isMobile) return;
+
+		const htmlOverflow = document.documentElement.style.overflow;
+		const bodyOverflow = document.body.style.overflow;
+
+		document.documentElement.style.overflow = "hidden";
+		document.body.style.overflow = "hidden";
+
+		const frame = window.requestAnimationFrame(() => {
+			firstMobileActionRef.current?.focus();
+		});
+
+		return () => {
+			window.cancelAnimationFrame(frame);
+			document.documentElement.style.overflow = htmlOverflow;
+			document.body.style.overflow = bodyOverflow;
+		};
+	}, [isMobile, mobileMenuOpen]);
 
 	useGSAP(
 		() => {
@@ -281,13 +303,17 @@ export function Navbar() {
 		}
 	};
 
+	const isLinkActive = (link: (typeof NAV_LINKS)[number]) => {
+		if (link.target.startsWith("#")) {
+			return location.pathname === "/" && location.hash === link.target;
+		}
+
+		return location.pathname === link.target;
+	};
+
 	const handleScroll = (link: (typeof NAV_LINKS)[number]) => {
 		setMobileMenuOpen(false);
-		if ("external" in link && link.external) {
-			goToTarget(link.target);
-		} else {
-			goToTarget(link.target);
-		}
+		goToTarget(link.target);
 	};
 
 	return (
@@ -307,50 +333,51 @@ export function Navbar() {
 				<Button
 					variant="ghost"
 					size="sm"
-					className="p-0 text-lg font-semibold text-foreground hover:bg-transparent md:text-xl"
+					className="p-0 font-semibold text-foreground hover:bg-transparent"
 					onClick={() => goToTarget("#hero")}
-					role="menuitem"
 				>
 					<div className="flex items-center gap-2">
 						<EyeLogoIcon className="size-4" />
-						<span>Carlos Aguilar</span>
+						<span className="text-lg lg:text-xl xl:text-2xl">
+							Carlos Aguilar
+						</span>
 					</div>
 				</Button>
 
-				<div
-					className="hidden absolute left-1/2 -translate-x-1/2 md:flex items-center gap-2"
-					role="menubar"
-					aria-label="Navegacion de escritorio"
-				>
+				<div className="hidden absolute left-1/2 -translate-x-1/2 translate-y-[3px] lg:flex items-center gap-2">
 					{NAV_LINKS.map((link) => (
 						<Button
 							key={link.target}
 							variant="ghost"
 							size="sm"
-							className="text-[15px] leading-none font-medium text-foreground/80 hover:text-foreground hover:bg-transparent md:text-[18px] lg:text-[22px] xl:text-[30px]"
+							className={cn(
+								"text-lg leading-none font-medium hover:bg-transparent lg:text-xl xl:text-2xl",
+								isLinkActive(link)
+									? "text-foreground"
+									: "text-foreground/72 hover:text-foreground",
+							)}
 							onClick={() => handleScroll(link)}
-							role="menuitem"
+							aria-current={isLinkActive(link) ? "page" : undefined}
 						>
 							{link.label}
 						</Button>
 					))}
 				</div>
 
-				<div className="hidden md:flex items-center gap-3">
+				<div className="hidden lg:flex items-center gap-3">
 					<ThemeToggle />
 
 					<Button
 						variant="default"
 						size="sm"
-						className="border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110 md:text-lg"
+						className="border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110 lg:text-lg"
 						onClick={() => goToTarget("#footer")}
-						role="menuitem"
 					>
 						Contacto
 					</Button>
 				</div>
 
-				<div className="flex md:hidden items-center gap-2">
+				<div className="flex lg:hidden items-center gap-2">
 					<ThemeToggle />
 
 					<Button
@@ -358,9 +385,11 @@ export function Navbar() {
 						size="sm"
 						ref={toggleButtonRef}
 						onClick={() => setMobileMenuOpen((prev) => !prev)}
-						className="relative flex size-8 items-center justify-center"
+						className={cn(
+							"relative flex size-9 items-center justify-center rounded-full border border-border/70 bg-card/70 shadow-sm backdrop-blur-sm",
+							mobileMenuOpen && "bg-card-elevated",
+						)}
 						aria-expanded={mobileMenuOpen}
-						aria-haspopup="true"
 						aria-controls={mobileMenuId}
 						aria-label={mobileMenuOpen ? "Cerrar menu" : "Abrir menu"}
 					>
@@ -383,10 +412,18 @@ export function Navbar() {
 			</div>
 
 			<div
-				ref={menuRef}
+				className={cn(
+					"fixed inset-0 z-[-1] bg-foreground/8 backdrop-blur-[2px] transition-opacity duration-200 lg:hidden",
+					mobileMenuOpen
+						? "pointer-events-auto opacity-100"
+						: "pointer-events-none opacity-0",
+				)}
+				aria-hidden="true"
+				onClick={() => setMobileMenuOpen(false)}
+			/>
+
+			<div
 				id={mobileMenuId}
-				role="menu"
-				aria-label="Navegacion movil"
 				className={cn(
 					"absolute top-full mt-2 w-full px-2 lg:hidden",
 					mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none",
@@ -395,17 +432,23 @@ export function Navbar() {
 			>
 				<div
 					ref={menuContentRef}
-					className="rounded-lg border bg-card/75 p-4 shadow-lg flex flex-col gap-2 overflow-hidden"
-					style={{ visibility: "hidden" }}
+					className="flex flex-col gap-1.5 overflow-hidden rounded-2xl border border-border/80 bg-card/90 p-3 shadow-2xl backdrop-blur-xl"
+					style={{ display: "none", visibility: "hidden" }}
 				>
 					{NAV_LINKS.map((link) => (
 						<Button
 							key={link.target}
 							variant="ghost"
 							size="sm"
-							className="justify-start px-0 text-base font-medium text-foreground/80 hover:text-foreground"
+							ref={link === NAV_LINKS[0] ? firstMobileActionRef : undefined}
+							className={cn(
+								"h-11 justify-start rounded-xl px-3 text-base font-medium",
+								isLinkActive(link)
+									? "bg-card-muted text-foreground"
+									: "text-foreground/80 hover:bg-card-muted hover:text-foreground",
+							)}
 							onClick={() => handleScroll(link)}
-							role="menuitem"
+							aria-current={isLinkActive(link) ? "page" : undefined}
 						>
 							{link.label}
 						</Button>
@@ -413,9 +456,11 @@ export function Navbar() {
 					<Button
 						variant="default"
 						size="sm"
-						className="mt-2 border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110"
-						onClick={() => goToTarget("#footer")}
-						role="menuitem"
+						className="mt-1 h-11 rounded-xl border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110"
+						onClick={() => {
+							setMobileMenuOpen(false);
+							goToTarget("#footer");
+						}}
 					>
 						Contacto
 					</Button>

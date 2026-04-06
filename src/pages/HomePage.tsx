@@ -1,6 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllPostsMeta, type PostMeta } from "@/lib/posts";
-import Blog from "@/sections/blog/blog";
 import Contact from "@/sections/contact/contact";
 import FAQ from "@/sections/faq/faq";
 import Footer from "@/sections/footer/footer";
@@ -11,11 +8,6 @@ import Testimonials from "@/sections/testimonials/testimonials";
 import Works from "@/sections/works/works";
 
 export default function HomePage() {
-	const { data: posts = [] } = useQuery<PostMeta[]>({
-		queryKey: ["posts"],
-		queryFn: getAllPostsMeta,
-	});
-
 	return (
 		<main className="flex flex-col items-stretch justify-start w-full divide-y divide-border/80">
 			<ParallaxBanner />
@@ -26,7 +18,6 @@ export default function HomePage() {
 			<FAQ />
 			<Contact />
 			{/* TODO: Seccion de blog en pausa */}
-			{/* <Blog posts={posts} /> */}
 			<Footer />
 		</main>
 	);

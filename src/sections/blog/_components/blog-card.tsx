@@ -17,7 +17,7 @@ type BlogCardProps = {
 };
 
 export default function BlogCard({ meta }: BlogCardProps) {
-	const navigate = useNavigate();
+	const _navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const hasPrefetchedRef = useRef(false);
 	const prefetchBlogRoute = useCallback(() => {

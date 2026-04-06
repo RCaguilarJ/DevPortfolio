@@ -36,7 +36,7 @@ export default function BlogPostPage() {
 		return <BlogPostSkeleton />;
 	}
 
-	if (!meta) {
+	if (!slug || !meta) {
 		return <NotFound />;
 	}
 
@@ -102,7 +102,7 @@ export default function BlogPostPage() {
 				<section className="flex w-full flex-col px-4 py-8 md:p-8 border-b border-border/80 border-dashed">
 					<div className="min-h-[200px]">
 						<Suspense fallback={<ArticleSkeleton />}>
-							<PostContent slug={slug!} />
+							<PostContent slug={slug} />
 						</Suspense>
 					</div>
 				</section>

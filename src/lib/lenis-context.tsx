@@ -67,7 +67,7 @@ export const LenisProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
 	const lenis = useRef<Lenis | null>(null);
 	const pendingScrollRef = useRef<PendingScrollTarget | null>(null);
-	const [searchParams] = useSearchParams();
+	const [_searchParams] = useSearchParams();
 	const pathname = window.location.pathname;
 
 	useEffect(() => {
@@ -130,7 +130,7 @@ export const LenisProvider: React.FC<{ children: ReactNode }> = ({
 		};
 
 		requestAnimationFrame(tick);
-	}, [pathname, searchParams]);
+	}, [pathname]);
 
 	return (
 		<LenisContext.Provider value={{ lenis, scrollTo }}>

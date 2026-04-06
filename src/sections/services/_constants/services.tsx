@@ -148,28 +148,30 @@ export const bestPractices: ServiceItem[] = [
 ];
 
 export const serviceFeatures: ServiceFeature[] = [
-       {
-	       name: "Stack's",
-	       description:
-		       "Lo que eh aprendido con el tiempo creando proyectos desde cero tanto en desarrollo como en wordpress.",
-	       href: "#",
-	       className: "col-span-1",
-	       background: <ServicesCardContent items={serviceItems} delay={4500} maxVisible={6} />,
-       },
-       {
-	       name: "De diseno a desarrollo",
-	       description:
-		       "Replicamos el diseño de fgma, analizo las herramientas necesarias y escalables a utilizar, se empieza a codificar, creamos repositorios para pruebas locales y posteriormente se despliega en producción.",
-	       href: "#",
-	       className: "col-span-1",
-	       background: <ConvertingCardContent icons={convertingCardIcons} />,
-       },
-       {
-	       name: "Estandares de codigo",
-	       description:
-		       "Valores de ingenieria, rituales de revision o lineamientos que mantienen mi trabajo sostenible.",
-	       href: "#",
-	       className: "col-span-1",
-	       background: <CleanCodeCardContent items={bestPractices} />,
-       },
+	{
+		name: "Stack's",
+		description:
+			"Lo que eh aprendido con el tiempo creando proyectos desde cero tanto en desarrollo como en wordpress.",
+		href: "#",
+		className: "col-span-1",
+		background: (
+			<ServicesCardContent items={serviceItems} delay={4500} maxVisible={6} />
+		),
+	},
+	{
+		name: "De diseno a desarrollo",
+		description:
+			"Replicamos el diseño de fgma, analizo las herramientas necesarias y escalables a utilizar, se empieza a codificar, creamos repositorios para pruebas locales y posteriormente se despliega en producción.",
+		href: "#",
+		className: "col-span-1",
+		background: <ConvertingCardContent icons={convertingCardIcons} />,
+	},
+	{
+		name: "Estandares de codigo",
+		description:
+			"Valores de ingenieria, rituales de revision o lineamientos que mantienen mi trabajo sostenible.",
+		href: "#",
+		className: "col-span-1",
+		background: <CleanCodeCardContent items={bestPractices} />,
+	},
 ];

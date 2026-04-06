@@ -10,7 +10,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { ServiceItem } from "@/sections/services/_constants/services";
 

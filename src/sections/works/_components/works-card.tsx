@@ -53,12 +53,7 @@ export default function WorksCard({
 							</CardDescription>
 						</div>
 
-						<Button
-							asChild
-							size="sm"
-							variant="secondary"
-							className="shrink-0"
-						>
+						<Button asChild size="sm" variant="secondary" className="shrink-0">
 							<a href={link} target="_blank" rel="noreferrer">
 								Ver proyecto
 							</a>

@@ -2,6 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import heroVideo from "@/assets/hero-bg-vid.mp4";
 import { Button } from "@/components/ui/button";
 import { ShinyBadge } from "@/components/ui/shiny-badge";
 import {
@@ -11,7 +12,6 @@ import {
 	SplitText,
 } from "@/lib/gsap-config";
 import { useLenis } from "@/lib/lenis-context";
-import heroVideo from "@/assets/hero-bg-vid.mp4";
 
 registerGsapPlugins();
 
@@ -65,7 +65,9 @@ export default function Hero() {
 
 			const splits: SplitText[] = [];
 			context.add(() => {
-				splits.forEach((split) => split.revert());
+				splits.forEach((split) => {
+					split.revert();
+				});
 			});
 
 			const titleSplit = titleRef.current
@@ -234,6 +236,16 @@ export default function Hero() {
 		tl.set(pixels, { display: "none" });
 	}, []);
 
+	useEffect(() => {
+		const card = cardRef.current;
+		if (!card) return;
+
+		card.addEventListener("mouseleave", handleMouseLeave);
+		return () => {
+			card.removeEventListener("mouseleave", handleMouseLeave);
+		};
+	}, [handleMouseLeave]);
+
 	return (
 		<section
 			ref={heroRef}
@@ -259,7 +271,6 @@ export default function Hero() {
 			<div className="relative z-10 w-full px-4 md:px-16 py-24">
 				<div
 					ref={cardRef}
-					onMouseLeave={handleMouseLeave}
 					className="relative overflow-hidden rounded-2xl p-6 md:p-8 max-w-2xl"
 					style={{
 						backdropFilter: "blur(16px)",

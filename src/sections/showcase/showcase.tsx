@@ -1,5 +1,5 @@
-import { Suspense, lazy, useEffect, useState } from "react";
 import { CubeIcon } from "@radix-ui/react-icons";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Section from "@/components/layout/section";
 import { cn } from "@/lib/utils";
 import ShowcaseCard from "@/sections/showcase/_components/showcase-card";
@@ -64,14 +64,19 @@ export default function Showcase() {
 				)}
 			</div>
 			{showcaseHighlights.map(
-				(
-					{ className, title, description, src, poster, mediaClassName },
-					index,
-				) => {
+				({
+					id,
+					className,
+					title,
+					description,
+					src,
+					poster,
+					mediaClassName,
+				}) => {
 					if (src === "/AppsGDLmockup.mp4") {
 						return (
 							<div
-								key={`rocket-${index}`}
+								key={`${id}-rocket`}
 								className={cn("w-full lg:col-span-1 lg:row-span-1", className)}
 							>
 								<ClientOnly fallback={rocketFallback("min-h-[220px]")}>
@@ -85,7 +90,7 @@ export default function Showcase() {
 
 					return (
 						<div
-							key={`${poster}-${index}`}
+							key={id}
 							className={cn("w-full lg:col-span-1 lg:row-span-1", className)}
 						>
 							<ShowcaseCard

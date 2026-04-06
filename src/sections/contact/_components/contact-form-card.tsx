@@ -16,9 +16,8 @@ export default function ContactFormCard() {
 	const [errors, setErrors] = useState<ContactErrors>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setIsSubmitting(true);
 
 		const form = event.currentTarget;
 		const formData = new FormData(form);
@@ -32,62 +31,60 @@ export default function ContactFormCard() {
 
 		const parsed = contactSchema.safeParse(values);
 
-		const submit = async () => {
-			if (!parsed.success) {
-				const nextErrors: ContactErrors = {};
-				for (const issue of parsed.error.issues) {
-					const field = issue.path[0];
-					if (
-						typeof field === "string" &&
-						!nextErrors[field as keyof ContactErrors]
-					) {
-						nextErrors[field as keyof ContactErrors] = issue.message;
-					}
+		if (!parsed.success) {
+			const nextErrors: ContactErrors = {};
+			for (const issue of parsed.error.issues) {
+				const field = issue.path[0];
+				if (
+					typeof field === "string" &&
+					!nextErrors[field as keyof ContactErrors]
+				) {
+					nextErrors[field as keyof ContactErrors] = issue.message;
 				}
-				setErrors(nextErrors);
-				const firstIssue = parsed.error.issues[0];
-				toast.warning({
-					title: "Revisa el formulario",
-					description: firstIssue?.message ?? "Revisa los campos resaltados.",
-				});
-				setIsSubmitting(false);
-				return;
 			}
 
-			setErrors({});
-			try {
-				// In a real app, you would call an API endpoint here
-				// For now, we'll simulate a successful submission
-				await new Promise((resolve) => setTimeout(resolve, 1000));
-				form.reset();
-				toast.success({
-					title: "Mensaje enviado",
-					description: "Gracias. Recibiras respuesta en dos dias habiles.",
-				});
-			} catch (error) {
-				console.error(error);
-				toast.error({
-					title: "No se pudo enviar",
-					description: "Algo salio mal al enviar tu mensaje.",
-				});
-			} finally {
-				setIsSubmitting(false);
-			}
-		};
+			setErrors(nextErrors);
+			const firstIssue = parsed.error.issues[0];
+			toast.warning({
+				title: "Revisa el formulario",
+				description: firstIssue?.message ?? "Revisa los campos resaltados.",
+			});
+			return;
+		}
 
-		void submit();
+		setIsSubmitting(true);
+		setErrors({});
+
+		try {
+			// In a real app, you would call an API endpoint here.
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+			form.reset();
+			toast.success({
+				title: "Mensaje enviado",
+				description: "Gracias. Recibiras respuesta en dos dias habiles.",
+			});
+		} catch (error) {
+			console.error(error);
+			toast.error({
+				title: "No se pudo enviar",
+				description: "Algo salio mal al enviar tu mensaje.",
+			});
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
 		<Card className="relative w-full max-w-xl z-10">
 			<CardContent>
-				<Form onSubmit={handleSubmit} className="space-y-4">
+				<Form noValidate onSubmit={handleSubmit} className="space-y-4">
 					<div className="grid gap-4 md:grid-cols-2">
 						<Input
 							label="Nombre"
 							name="firstName"
 							placeholder="Juan"
 							required
+							errorMessage={errors.firstName}
 							wrapperClassName="w-full bg-[color-mix(in_oklch,var(--color-background)_60%,var(--color-card)_40%)]"
 							variant={errors.firstName ? "error" : "default"}
 						/>
@@ -96,6 +93,7 @@ export default function ContactFormCard() {
 							name="lastName"
 							placeholder="Perez"
 							required
+							errorMessage={errors.lastName}
 							wrapperClassName="w-full bg-[color-mix(in_oklch,var(--color-background)_60%,var(--color-card)_40%)]"
 							variant={errors.lastName ? "error" : "default"}
 						/>
@@ -106,6 +104,7 @@ export default function ContactFormCard() {
 						name="email"
 						placeholder="tu@correo.com"
 						required
+						errorMessage={errors.email}
 						wrapperClassName="w-full bg-[color-mix(in_oklch,var(--color-background)_60%,var(--color-card)_40%)]"
 						variant={errors.email ? "error" : "default"}
 					/>
@@ -113,6 +112,7 @@ export default function ContactFormCard() {
 						label="Proyecto o empresa"
 						name="subject"
 						placeholder="Cuentame que estas construyendo"
+						errorMessage={errors.subject}
 						wrapperClassName="w-full bg-[color-mix(in_oklch,var(--color-background)_60%,var(--color-card)_40%)]"
 						variant={errors.subject ? "error" : "default"}
 					/>
@@ -122,6 +122,7 @@ export default function ContactFormCard() {
 						placeholder="Que problema vamos a resolver juntos?"
 						rows={5}
 						required
+						errorMessage={errors.message}
 						wrapperClassName="w-full bg-[color-mix(in_oklch,var(--color-background)_60%,var(--color-card)_40%)]"
 						variant={errors.message ? "error" : "default"}
 					/>

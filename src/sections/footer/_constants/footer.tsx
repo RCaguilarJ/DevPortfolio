@@ -26,7 +26,6 @@ const IconLinkedIn = (props: React.SVGProps<SVGSVGElement>) => (
 	</svg>
 );
 
-
 export type FooterLink = {
 	label: string;
 	href: string;

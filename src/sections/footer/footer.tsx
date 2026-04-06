@@ -44,9 +44,7 @@ export default function Footer() {
 							<EyeLogoIcon className="size-4" />
 							<p className="text-sm font-medium">Carlos Aguilar</p>
 						</div>
-						<p className="text-xs text-foreground/70 leading-relaxed max-w-xs">
-							
-						</p>
+						<p className="text-xs text-foreground/70 leading-relaxed max-w-xs"></p>
 					</div>
 
 					<div className="flex items-center gap-3">
@@ -114,12 +112,8 @@ export default function Footer() {
 
 			<div className="text-xs text-foreground/70 border-t border-border/80">
 				<div className="w-full mx-auto flex flex-col md:flex-row gap-1 px-4 py-4 md:px-2 items-center justify-between">
-					<p>
-						(c) {currentYear} Carlos Aguilar. 
-					</p>
-					<p>
-						
-					</p>
+					<p>(c) {currentYear} Carlos Aguilar.</p>
+					<p></p>
 				</div>
 			</div>
 		</footer>

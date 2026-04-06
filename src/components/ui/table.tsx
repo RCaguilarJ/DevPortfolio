@@ -265,7 +265,7 @@ export function Table<TData>({
 			.getSelectedRowModel()
 			.rows.map((tableRow) => tableRow);
 		onSelectedRowsChange(selectedRows);
-	}, [table, onSelectedRowsChange, rowSelection]);
+	}, [table, onSelectedRowsChange]);
 
 	const tableRef = React.useRef<HTMLDivElement>(null);
 
@@ -289,6 +289,16 @@ export function Table<TData>({
 	}, [visibleColumns]);
 
 	const rows = table.getRowModel().rows;
+	const handleRowKeyDown = (
+		event: React.KeyboardEvent<HTMLDivElement>,
+		row: Row<TData>,
+	) => {
+		if (!onRowClick) return;
+		if (event.key === "Enter" || event.key === " ") {
+			event.preventDefault();
+			onRowClick(row);
+		}
+	};
 
 	return (
 		<div
@@ -302,7 +312,6 @@ export function Table<TData>({
 					(headerGroup: ReturnType<typeof table.getHeaderGroups>[number]) => (
 						<div
 							key={headerGroup.id}
-							role="row"
 							className="grid border-b border-border/60 bg-card-muted/50 dark:bg-card-muted/30 rounded-t-lg"
 							style={{ gridTemplateColumns }}
 							tabIndex={-1}
@@ -330,7 +339,6 @@ export function Table<TData>({
 										return (
 											<div
 												key={header.id}
-												role="columnheader"
 												title={meta?.headerTooltip}
 												className={cn(
 													headerCellVariants({
@@ -356,16 +364,15 @@ export function Table<TData>({
 										<button
 											key={header.id}
 											type="button"
-											role="columnheader"
 											title={meta?.headerTooltip}
 											onClick={column.getToggleSortingHandler()}
-											aria-sort={
+											aria-label={`Ordenar ${String(header.column.columnDef.header)}: ${
 												sortStateRaw === "asc"
-													? "ascending"
+													? "ascendente"
 													: sortStateRaw === "desc"
-														? "descending"
-														: "none"
-											}
+														? "descendente"
+														: "sin ordenar"
+											}`}
 											className={cn(
 												headerCellVariants({
 													align,
@@ -395,12 +402,7 @@ export function Table<TData>({
 					),
 				)}
 
-			<div
-				role="grid"
-				aria-rowcount={rows.length}
-				aria-colcount={visibleColumns.length}
-				className="rounded-lg transition-shadow duration-100 ease-out-quad focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:ring-offset-1 focus-visible:ring-offset-ring-offset/50 focus-visible:outline-none"
-			>
+			<div className="rounded-lg transition-shadow duration-100 ease-out-quad focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:ring-offset-1 focus-visible:ring-offset-ring-offset/50 focus-visible:outline-none">
 				{rows.length === 0 && (
 					<div className="px-6 py-10 text-center text-foreground/70">
 						{emptyState ?? "No data available"}
@@ -408,19 +410,54 @@ export function Table<TData>({
 				)}
 
 				{rows.map((row: (typeof rows)[number]) => {
+					const rowClassName = cn(
+						rowVariants({
+							selected: row.getIsSelected(),
+						}),
+					);
+
+					if (onRowClick) {
+						return (
+							// biome-ignore lint/a11y/useSemanticElements: This row uses a grid-based div layout to support arbitrary cell content.
+							<div
+								key={row.id}
+								data-row-id={row.id}
+								role="button"
+								className={rowClassName}
+								style={{ gridTemplateColumns }}
+								onClick={() => onRowClick(row)}
+								onKeyDown={(event) => handleRowKeyDown(event, row)}
+								tabIndex={0}
+							>
+								{row.getVisibleCells().map((cell) => {
+									const meta = cell.column.columnDef.meta as
+										| ColumnMeta<TData, unknown>
+										| undefined;
+									const align = meta?.align ?? "left";
+
+									return (
+										<div
+											key={cell.id}
+											className={cn(cellVariants({ align }), meta?.className)}
+											tabIndex={-1}
+										>
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext(),
+											)}
+										</div>
+									);
+								})}
+							</div>
+						);
+					}
+
 					return (
 						<div
 							key={row.id}
-							role="row"
 							data-row-id={row.id}
-							aria-selected={row.getIsSelected() || undefined}
-							className={cn(
-								rowVariants({
-									selected: row.getIsSelected(),
-								}),
-							)}
+							className={rowClassName}
 							style={{ gridTemplateColumns }}
-							onClick={() => onRowClick?.(row)}
 						>
 							{row.getVisibleCells().map((cell) => {
 								const meta = cell.column.columnDef.meta as
@@ -431,7 +468,6 @@ export function Table<TData>({
 								return (
 									<div
 										key={cell.id}
-										role="gridcell"
 										className={cn(cellVariants({ align }), meta?.className)}
 										tabIndex={-1}
 									>
