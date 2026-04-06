@@ -34,7 +34,7 @@ const colorWithOpacity = (token: string, opacity: number) => {
 export function Navbar() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [isMobile, setIsMobile] = useState(
-		typeof window !== "undefined" ? window.innerWidth < 1024 : false,
+		typeof window !== "undefined" ? window.innerWidth < 1280 : false,
 	);
 	const [isNavbarElevated, setIsNavbarElevated] = useState(false);
 	const navbarRef = useRef<HTMLDivElement>(null);
@@ -56,7 +56,7 @@ export function Navbar() {
 
 	useEffect(() => {
 		const updateViewport = () => {
-			setIsMobile(window.innerWidth < 1024);
+			setIsMobile(window.innerWidth < 1280);
 		};
 
 		updateViewport();
@@ -324,7 +324,7 @@ export function Navbar() {
 			<div
 				ref={navbarRef}
 				className={cn(
-					"relative flex w-full items-center justify-between rounded-lg py-1.5 px-4",
+					"relative grid w-full grid-cols-[minmax(0,auto)_1fr_minmax(0,auto)] items-center gap-3 rounded-lg px-4 py-1.5 xl:gap-6",
 					"bg-card/75 lg:bg-card/0 border border-border lg:border-border/0 dark:card-highlight",
 					"[--highlight-opacity:1] lg:[--highlight-opacity:0] text-foreground transition-shadow duration-350 ease-navbar",
 					isNavbarElevated && "shadow-lg",
@@ -333,25 +333,25 @@ export function Navbar() {
 				<Button
 					variant="ghost"
 					size="sm"
-					className="p-0 font-semibold text-foreground hover:bg-transparent"
+					className="min-w-0 justify-self-start p-0 font-semibold text-foreground hover:bg-transparent xl:min-w-[220px]"
 					onClick={() => goToTarget("#hero")}
 				>
 					<div className="flex items-center gap-2">
 						<EyeLogoIcon className="size-4" />
-						<span className="text-lg lg:text-xl xl:text-2xl">
+						<span className="truncate text-lg xl:text-xl 2xl:text-2xl">
 							Carlos Aguilar
 						</span>
 					</div>
 				</Button>
 
-				<div className="hidden absolute left-1/2 -translate-x-1/2 translate-y-[3px] lg:flex items-center gap-2">
+				<div className="hidden min-w-0 items-center justify-center gap-1 justify-self-center xl:flex 2xl:gap-2">
 					{NAV_LINKS.map((link) => (
 						<Button
 							key={link.target}
 							variant="ghost"
 							size="sm"
 							className={cn(
-								"text-lg leading-none font-medium hover:bg-transparent lg:text-xl xl:text-2xl",
+								"px-2 text-lg leading-none font-medium hover:bg-transparent xl:text-xl 2xl:text-2xl",
 								isLinkActive(link)
 									? "text-foreground"
 									: "text-foreground/72 hover:text-foreground",
@@ -364,20 +364,20 @@ export function Navbar() {
 					))}
 				</div>
 
-				<div className="hidden lg:flex items-center gap-3">
+				<div className="hidden items-center justify-end gap-3 justify-self-end xl:flex xl:min-w-[220px]">
 					<ThemeToggle />
 
 					<Button
 						variant="default"
 						size="sm"
-						className="border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110 lg:text-lg"
+						className="border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110 xl:text-lg"
 						onClick={() => goToTarget("#footer")}
 					>
 						Contacto
 					</Button>
 				</div>
 
-				<div className="flex lg:hidden items-center gap-2">
+				<div className="flex items-center justify-self-end gap-2 xl:hidden">
 					<ThemeToggle />
 
 					<Button
@@ -413,7 +413,7 @@ export function Navbar() {
 
 			<div
 				className={cn(
-					"fixed inset-0 z-[-1] bg-foreground/8 backdrop-blur-[2px] transition-opacity duration-200 lg:hidden",
+					"fixed inset-0 z-[-1] bg-foreground/8 backdrop-blur-[2px] transition-opacity duration-200 xl:hidden",
 					mobileMenuOpen
 						? "pointer-events-auto opacity-100"
 						: "pointer-events-none opacity-0",
@@ -425,7 +425,7 @@ export function Navbar() {
 			<div
 				id={mobileMenuId}
 				className={cn(
-					"absolute top-full mt-2 w-full px-2 lg:hidden",
+					"absolute top-full mt-2 w-full px-2 xl:hidden",
 					mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none",
 				)}
 				aria-hidden={!mobileMenuOpen}

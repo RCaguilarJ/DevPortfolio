@@ -67,7 +67,7 @@ export const absoluteUrl = (path = "/") => {
 };
 
 const DEFAULT_IMAGE = absoluteUrl("/og-image.jpg");
-const DEFAULT_LOGO = absoluteUrl("/favicon.svg");
+const DEFAULT_LOGO = absoluteUrl("/favicon.svg?v=20260405b");
 
 export const siteMetadata = {
 	siteName: SITE_NAME,
@@ -139,11 +139,24 @@ export function getRootSeo(): HeadTags {
 
 	const links: LinkTag[] = [
 		{ rel: "canonical", href: canonical },
-		{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-		{ rel: "icon", href: "/favicon.ico" },
-		{ rel: "icon", href: "/favicon-96x96.png", sizes: "96x96" },
-		{ rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-		{ rel: "manifest", href: "/site.webmanifest" },
+		{
+			rel: "icon",
+			href: "/favicon.svg?v=20260405b",
+			type: "image/svg+xml",
+			sizes: "any",
+		},
+		{ rel: "icon", href: "/favicon.ico?v=20260405b", sizes: "any" },
+		{
+			rel: "icon",
+			href: "/favicon-96x96.png?v=20260405b",
+			type: "image/png",
+			sizes: "96x96",
+		},
+		{
+			rel: "apple-touch-icon",
+			href: "/apple-touch-icon.png?v=20260405b",
+		},
+		{ rel: "manifest", href: "/site.webmanifest?v=20260405b" },
 	];
 
 	const scripts: ScriptTag[] = [
