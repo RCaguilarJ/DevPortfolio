@@ -22,4 +22,11 @@ export const works: WorksItem[] = [
 		link: "https://app.desingsgdl.app/views/login.php",
 		textClassName: "text-black",
 	},
+	{
+		image: "/project3.png",
+		title: "Proyecto 3",
+		description:
+			"Landing y plataforma de BrandUp Network desplegada en Vercel.",
+		link: "https://brandup-network-proyect.vercel.app/",
+	},
 ];
