@@ -32,4 +32,11 @@ export const works: WorksItem[] = [
 		link: "https://brandup-network-proyect.vercel.app/",
 		showOnHome: true,
 	},
+	{
+		image: "/port.png",
+		title: "Port",
+		description: "Imagen agregada para la vista completa de proyectos.",
+		link: "https://brandup-network-proyect.vercel.app/",
+		showOnHome: false,
+	},
 ];

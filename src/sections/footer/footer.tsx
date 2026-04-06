@@ -1,38 +1,23 @@
 import type { MouseEvent } from "react";
-import { useLocation, useNavigate } from "react-router";
 import { EyeLogoIcon } from "@/components/icons/eye-logo-icon";
-import { useLenis } from "@/lib/lenis-context";
 import {
-	footerLinks,
 	footerSocialLinks,
-} from "@/sections/footer/_constants/footer";
-
-const WHATSAPP_NUMBER = "3751111294";
-const WHATSAPP_LINK = "https://wa.me/523751111294";
+	type NavigationTarget,
+	primaryNavigation,
+	siteConfig,
+} from "@/config/site";
+import { useAppNavigation } from "@/hooks/use-app-navigation";
 
 export default function Footer() {
 	const currentYear = new Date().getFullYear();
-	const { scrollTo } = useLenis();
-	const location = useLocation();
-	const navigate = useNavigate();
+	const { goToTarget } = useAppNavigation();
 
 	const handleNavigationClick = (
 		event: MouseEvent<HTMLAnchorElement>,
-		target: string,
+		target: NavigationTarget,
 	) => {
 		event.preventDefault();
-		if (target.startsWith("#")) {
-			if (location.pathname === "/") {
-				scrollTo(target);
-				window.history.replaceState(null, "", target);
-				return;
-			}
-
-			navigate(`/${target}`);
-			return;
-		}
-
-		navigate(target);
+		goToTarget(target);
 	};
 
 	return (
@@ -42,7 +27,7 @@ export default function Footer() {
 					<div className="flex flex-col gap-3">
 						<div className="flex gap-2 items-center text-foreground">
 							<EyeLogoIcon className="size-4" />
-							<p className="text-sm font-medium">Carlos Aguilar</p>
+							<p className="text-sm font-medium">{siteConfig.name}</p>
 						</div>
 						<p className="text-xs text-foreground/70 leading-relaxed max-w-xs"></p>
 					</div>
@@ -63,10 +48,10 @@ export default function Footer() {
 					</div>
 
 					<a
-						href={WHATSAPP_LINK}
+						href={siteConfig.whatsAppLink}
 						target="_blank"
 						rel="noreferrer"
-						aria-label={`Abrir WhatsApp al ${WHATSAPP_NUMBER}`}
+						aria-label={`Abrir WhatsApp al ${siteConfig.whatsAppNumber}`}
 						className="group inline-flex w-fit items-center gap-3 rounded-full border border-border/80 bg-card-muted/70 px-3 py-2 text-sm text-foreground/80 transition-[color,background-color,border-color,box-shadow] duration-150 ease-out-quad hover:border-border hover:bg-card hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:ring-offset-1 focus-visible:ring-offset-ring-offset/50 focus-visible:outline-none"
 					>
 						<span className="flex size-8 items-center justify-center rounded-full bg-[#25D366] text-white shadow-sm">
@@ -86,7 +71,7 @@ export default function Footer() {
 								WhatsApp
 							</span>
 							<span className="font-medium text-foreground">
-								{WHATSAPP_NUMBER}
+								{siteConfig.whatsAppNumber}
 							</span>
 						</span>
 					</a>
@@ -95,11 +80,11 @@ export default function Footer() {
 				<div className="flex flex-col gap-2">
 					<p className="text-xs text-foreground">Navegacion</p>
 					<ul className="space-y-2 text-xs text-foreground/70">
-						{footerLinks.map((link) => (
+						{primaryNavigation.map((link) => (
 							<li key={link.label}>
 								<a
-									href={link.href}
-									onClick={(event) => handleNavigationClick(event, link.href)}
+									href={link.target}
+									onClick={(event) => handleNavigationClick(event, link.target)}
 									className="hover:text-foreground rounded transition-[color,shadow] duration-100 ease-out-quad focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:ring-offset-1 focus-visible:ring-offset-ring-offset/50 focus-visible:outline-none"
 								>
 									{link.label}
@@ -112,7 +97,9 @@ export default function Footer() {
 
 			<div className="text-xs text-foreground/70 border-t border-border/80">
 				<div className="w-full mx-auto flex flex-col md:flex-row gap-1 px-4 py-4 md:px-2 items-center justify-between">
-					<p>(c) {currentYear} Carlos Aguilar.</p>
+					<p>
+						(c) {currentYear} {siteConfig.name}.
+					</p>
 					<p></p>
 				</div>
 			</div>

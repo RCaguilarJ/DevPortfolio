@@ -1,3 +1,5 @@
+import { siteConfig } from "@/config/site";
+
 type MetaTag = {
 	charSet?: string;
 	name?: string;
@@ -37,63 +39,42 @@ export type BlogSeoPayload = {
 	date?: string;
 };
 
-const SITE_URL =
-	"https://my-portfolio-proyect-gulzk2vto-carlagular800-5846s-projects.vercel.app";
-const SITE_NAME = "Carlos Aguilar";
-const DEFAULT_TITLE = "Carlos Aguilar - WEB DEVELOPER";
-const DEFAULT_DESCRIPTION =
-	"Usa este espacio para describir el tipo de trabajo que haces, las industrias que atiendes y lo que hace unico tu enfoque.";
-const DEFAULT_KEYWORDS = [
-	"portafolio",
-	"freelance",
-	"independiente",
-	"desarrollador",
-	"disenador",
-];
-const AUTHOR = "your-handle";
-const CONTACT_EMAIL = "hello@vercel.app";
-const SOCIAL_PROFILES = [
-	"https://github.com/your-handle",
-	"https://www.linkedin.com/in/your-profile",
-	"https://www.instagram.com/your-handle",
-];
-
 export const absoluteUrl = (path = "/") => {
-	if (!path) return SITE_URL;
+	if (!path) return siteConfig.baseUrl;
 	if (path.startsWith("http://") || path.startsWith("https://")) {
 		return path;
 	}
-	return new URL(path, SITE_URL).toString();
+	return new URL(path, siteConfig.baseUrl).toString();
 };
 
 const DEFAULT_IMAGE = absoluteUrl("/og-image.jpg");
 const DEFAULT_LOGO = absoluteUrl("/favicon.svg?v=20260405b");
 
 export const siteMetadata = {
-	siteName: SITE_NAME,
-	baseUrl: SITE_URL,
-	defaultTitle: DEFAULT_TITLE,
-	defaultDescription: DEFAULT_DESCRIPTION,
-	keywords: DEFAULT_KEYWORDS,
-	author: AUTHOR,
-	email: CONTACT_EMAIL,
-	socialProfiles: SOCIAL_PROFILES,
+	siteName: siteConfig.name,
+	baseUrl: siteConfig.baseUrl,
+	defaultTitle: siteConfig.defaultTitle,
+	defaultDescription: siteConfig.defaultDescription,
+	keywords: siteConfig.keywords,
+	author: siteConfig.author,
+	email: siteConfig.email,
+	socialProfiles: siteConfig.socialProfiles,
 	defaultOgImage: DEFAULT_IMAGE,
 };
 
 const defaultJsonLd = {
 	"@context": "https://schema.org",
 	"@type": "ProfessionalService",
-	name: DEFAULT_TITLE,
+	name: siteConfig.defaultTitle,
 	image: DEFAULT_IMAGE,
 	url: absoluteUrl("/"),
-	description: DEFAULT_DESCRIPTION,
+	description: siteConfig.defaultDescription,
 	address: {
 		"@type": "PostalAddress",
 		addressCountry: "Worldwide",
 	},
-	email: CONTACT_EMAIL,
-	sameAs: SOCIAL_PROFILES,
+	email: siteConfig.email,
+	sameAs: siteConfig.socialProfiles,
 	offers: {
 		"@type": "Offer",
 		name: "Tu oferta de servicios",
@@ -113,26 +94,26 @@ export function getRootSeo(): HeadTags {
 	const meta: MetaTag[] = [
 		{ charSet: "utf-8" },
 		{ name: "viewport", content: "width=device-width, initial-scale=1" },
-		{ title: DEFAULT_TITLE },
-		{ name: "description", content: DEFAULT_DESCRIPTION },
-		{ name: "keywords", content: DEFAULT_KEYWORDS.join(", ") },
-		{ name: "author", content: AUTHOR },
+		{ title: siteConfig.defaultTitle },
+		{ name: "description", content: siteConfig.defaultDescription },
+		{ name: "keywords", content: siteConfig.keywords.join(", ") },
+		{ name: "author", content: siteConfig.author },
 		{ name: "robots", content: "index,follow" },
 		{ property: "og:type", content: "website" },
-		{ property: "og:site_name", content: SITE_NAME },
+		{ property: "og:site_name", content: siteConfig.name },
 		{ property: "og:url", content: canonical },
-		{ property: "og:title", content: DEFAULT_TITLE },
+		{ property: "og:title", content: siteConfig.defaultTitle },
 		{
 			property: "og:description",
-			content: DEFAULT_DESCRIPTION,
+			content: siteConfig.defaultDescription,
 		},
 		{ property: "og:image", content: DEFAULT_IMAGE },
 		{ name: "twitter:card", content: "summary_large_image" },
 		{ property: "twitter:url", content: canonical },
-		{ property: "twitter:title", content: DEFAULT_TITLE },
+		{ property: "twitter:title", content: siteConfig.defaultTitle },
 		{
 			property: "twitter:description",
-			content: DEFAULT_DESCRIPTION,
+			content: siteConfig.defaultDescription,
 		},
 		{ property: "twitter:image", content: DEFAULT_IMAGE },
 	];
@@ -178,20 +159,20 @@ const getIsoDate = (input?: string) => {
 
 export function getBlogPostSeo(post: BlogSeoPayload): HeadTags {
 	const canonical = absoluteUrl(`/blog/${post.slug}`);
-	const description = post.excerpt?.trim() || DEFAULT_DESCRIPTION;
+	const description = post.excerpt?.trim() || siteConfig.defaultDescription;
 	const keywords =
 		post.tags && post.tags.length > 0
 			? post.tags.join(", ")
-			: DEFAULT_KEYWORDS.join(", ");
+			: siteConfig.keywords.join(", ");
 	const isoDate = getIsoDate(post.date);
 
 	const meta: MetaTag[] = [
 		{ title: `${post.title} | Blog de portafolio` },
 		{ name: "description", content: description },
-		{ name: "author", content: AUTHOR },
+		{ name: "author", content: siteConfig.author },
 		{ name: "keywords", content: keywords },
 		{ property: "og:type", content: "article" },
-		{ property: "og:site_name", content: SITE_NAME },
+		{ property: "og:site_name", content: siteConfig.name },
 		{ property: "og:url", content: canonical },
 		{ property: "og:title", content: post.title },
 		{
@@ -236,11 +217,11 @@ export function getBlogPostSeo(post: BlogSeoPayload): HeadTags {
 		dateModified: isoDate,
 		author: {
 			"@type": "Person",
-			name: AUTHOR,
+			name: siteConfig.author,
 		},
 		publisher: {
 			"@type": "Organization",
-			name: SITE_NAME,
+			name: siteConfig.name,
 			logo: {
 				"@type": "ImageObject",
 				url: DEFAULT_LOGO,

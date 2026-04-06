@@ -1,9 +1,14 @@
 import { useGSAP } from "@gsap/react";
 import { useEffect, useId, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
 import { EyeLogoIcon } from "@/components/icons/eye-logo-icon";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import {
+	type NavigationLink,
+	primaryNavigation,
+	sectionTargets,
+} from "@/config/site";
+import { useAppNavigation } from "@/hooks/use-app-navigation";
 import {
 	gsap,
 	premiumEase,
@@ -14,16 +19,6 @@ import { useLenis } from "@/lib/lenis-context";
 import { cn } from "@/lib/utils";
 
 registerGsapPlugins();
-
-const NAV_LINKS: Array<{ label: string; target: string; external?: boolean }> =
-	[
-		{ label: "Servicios", target: "#services" },
-		{ label: "Proyectos", target: "#works" },
-		{ label: "Galeria", target: "#showcase" },
-		{ label: "Certificados", target: "/certificados", external: true },
-		{ label: "Testimonios", target: "#testimonios" },
-		{ label: "Preguntas", target: "#faq" },
-	];
 
 const colorWithOpacity = (token: string, opacity: number) => {
 	const clamped = Math.min(Math.max(opacity, 0), 1);
@@ -46,8 +41,7 @@ export function Navbar() {
 	const lineThreeRef = useRef<HTMLSpanElement>(null);
 	const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 	const { scrollTo } = useLenis();
-	const location = useLocation();
-	const navigate = useNavigate();
+	const { goToTarget, isTargetActive, location } = useAppNavigation();
 	const mobileMenuId = useId();
 
 	const toggleTl = useRef<gsap.core.Timeline | null>(null);
@@ -286,32 +280,7 @@ export function Navbar() {
 		};
 	}, [location.hash, location.pathname, scrollTo]);
 
-	const goToTarget = (target: string) => {
-		if (target.startsWith("#")) {
-			if (location.pathname === "/") {
-				scrollTo(target);
-				window.history.replaceState(null, "", target);
-				return;
-			}
-
-			navigate(`/${target}`);
-			return;
-		}
-
-		if (location.pathname !== target) {
-			navigate(target);
-		}
-	};
-
-	const isLinkActive = (link: (typeof NAV_LINKS)[number]) => {
-		if (link.target.startsWith("#")) {
-			return location.pathname === "/" && location.hash === link.target;
-		}
-
-		return location.pathname === link.target;
-	};
-
-	const handleScroll = (link: (typeof NAV_LINKS)[number]) => {
+	const handleScroll = (link: NavigationLink) => {
 		setMobileMenuOpen(false);
 		goToTarget(link.target);
 	};
@@ -334,30 +303,28 @@ export function Navbar() {
 					variant="ghost"
 					size="sm"
 					className="min-w-0 justify-self-start p-0 font-semibold text-foreground hover:bg-transparent xl:min-w-[220px]"
-					onClick={() => goToTarget("#hero")}
+					onClick={() => goToTarget(sectionTargets.hero)}
+					aria-label="Ir al inicio"
 				>
-					<div className="flex items-center gap-2">
+					<div className="flex items-center">
 						<EyeLogoIcon className="size-4" />
-						<span className="truncate text-lg xl:text-xl 2xl:text-2xl">
-							Carlos Aguilar
-						</span>
 					</div>
 				</Button>
 
 				<div className="hidden min-w-0 items-center justify-center gap-1 justify-self-center xl:flex 2xl:gap-2">
-					{NAV_LINKS.map((link) => (
+					{primaryNavigation.map((link) => (
 						<Button
 							key={link.target}
 							variant="ghost"
 							size="sm"
 							className={cn(
 								"px-2 text-lg leading-none font-medium hover:bg-transparent xl:text-xl 2xl:text-2xl",
-								isLinkActive(link)
+								isTargetActive(link.target)
 									? "text-foreground"
 									: "text-foreground/72 hover:text-foreground",
 							)}
 							onClick={() => handleScroll(link)}
-							aria-current={isLinkActive(link) ? "page" : undefined}
+							aria-current={isTargetActive(link.target) ? "page" : undefined}
 						>
 							{link.label}
 						</Button>
@@ -371,7 +338,7 @@ export function Navbar() {
 						variant="default"
 						size="sm"
 						className="border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110 xl:text-lg"
-						onClick={() => goToTarget("#footer")}
+						onClick={() => goToTarget(sectionTargets.footer)}
 					>
 						Contacto
 					</Button>
@@ -435,20 +402,20 @@ export function Navbar() {
 					className="flex flex-col gap-1.5 overflow-hidden rounded-2xl border border-border/80 bg-card/90 p-3 shadow-2xl backdrop-blur-xl"
 					style={{ display: "none", visibility: "hidden" }}
 				>
-					{NAV_LINKS.map((link) => (
+					{primaryNavigation.map((link, index) => (
 						<Button
 							key={link.target}
 							variant="ghost"
 							size="sm"
-							ref={link === NAV_LINKS[0] ? firstMobileActionRef : undefined}
+							ref={index === 0 ? firstMobileActionRef : undefined}
 							className={cn(
 								"h-11 justify-start rounded-xl px-3 text-base font-medium",
-								isLinkActive(link)
+								isTargetActive(link.target)
 									? "bg-card-muted text-foreground"
 									: "text-foreground/80 hover:bg-card-muted hover:text-foreground",
 							)}
 							onClick={() => handleScroll(link)}
-							aria-current={isLinkActive(link) ? "page" : undefined}
+							aria-current={isTargetActive(link.target) ? "page" : undefined}
 						>
 							{link.label}
 						</Button>
@@ -459,7 +426,7 @@ export function Navbar() {
 						className="mt-1 h-11 rounded-xl border border-slate-700/80 bg-[linear-gradient(135deg,#0B121B_0%,#101B29_52%,#162438_100%)] text-base font-semibold text-slate-50 shadow-[inset_0_1px_0_0_rgb(255_255_255/.08),0_0_0_1px_rgba(255,255,255,0.04),0_18px_42px_-24px_rgba(11,18,27,0.95)] hover:brightness-110"
 						onClick={() => {
 							setMobileMenuOpen(false);
-							goToTarget("#footer");
+							goToTarget(sectionTargets.footer);
 						}}
 					>
 						Contacto
