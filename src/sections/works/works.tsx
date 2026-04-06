@@ -7,6 +7,8 @@ import { Icons } from "@/lib/icons";
 import { works } from "@/sections/works/_constants/works";
 import WorksCard from "./_components/works-card";
 
+const featuredWorks = works.filter((item) => item.showOnHome);
+
 export default function Works() {
 	const [showLoading, setShowLoading] = useState(false);
 
@@ -19,12 +21,12 @@ export default function Works() {
 			<Section
 				id="works"
 				title="Mira algunos proyectos destacados"
-				description="Sustituye por casos reales que muestren tu rango - desde productos hasta experimentos creativos."
+				description="Solo Proyecto 1 y Proyecto 3 se muestran en home como destacados. El resto queda disponible en Ver todos los proyectos."
 				className="grid grid-cols-1 gap-4"
 				badgeText="Proyectos destacados"
 				badgeIcon={<GridIcon aria-hidden="true" className="size-3.5" />}
 			>
-				{works.map((item) => (
+				{featuredWorks.map((item) => (
 					<WorksCard
 						key={item.title}
 						image={item.image}

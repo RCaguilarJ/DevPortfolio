@@ -33,8 +33,8 @@ export default function WorksCard({
 				/>
 
 				{hasText ? (
-					<div className="absolute bottom-0 left-0 right-0 flex flex-col items-start gap-2 p-3 sm:flex-row sm:items-end sm:justify-between sm:gap-3 sm:p-4">
-						<div className="flex-1 min-w-0">
+					<div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 bg-gradient-to-t from-black/85 via-black/55 to-transparent p-3 sm:p-4">
+						<div className="min-w-0 max-w-2xl flex-1">
 							<CardTitle
 								className={cn(
 									"text-sm sm:text-base lg:text-lg leading-snug break-words",
@@ -45,7 +45,7 @@ export default function WorksCard({
 							</CardTitle>
 							<CardDescription
 								className={cn(
-									"text-xs sm:text-sm leading-snug break-words",
+									"text-xs sm:text-sm leading-snug break-words overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]",
 									descriptionClass,
 								)}
 							>
@@ -53,7 +53,12 @@ export default function WorksCard({
 							</CardDescription>
 						</div>
 
-						<Button asChild size="sm" variant="secondary" className="shrink-0">
+						<Button
+							asChild
+							size="sm"
+							variant="secondary"
+							className="w-fit shrink-0"
+						>
 							<a href={link} target="_blank" rel="noreferrer">
 								Ver proyecto
 							</a>
