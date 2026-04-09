@@ -8,11 +8,7 @@ import { Icons } from "@/lib/icons";
 
 export default function Resume() {
 	return (
-		<Section
-			id="resume"
-			title="CV listo para revisar en un clic"
-			className="max-w-4xl mx-auto"
-		>
+		<Section id="resume" className="max-w-4xl mx-auto">
 			<div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-[linear-gradient(180deg,rgba(17,22,30,0.98)_0%,rgba(10,14,20,0.98)_100%)] shadow-[0_24px_80px_-36px_rgba(0,0,0,0.85)] card-highlight">
 				<div className="rounded-[1.35rem] border border-white/10 bg-neutral-950 m-3 sm:m-4">
 					<div className="flex items-center justify-between border-b border-white/10 px-4 py-3">

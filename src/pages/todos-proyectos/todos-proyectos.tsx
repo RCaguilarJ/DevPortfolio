@@ -44,16 +44,6 @@ export default function TodosProyectosPage() {
 
 			<div className="relative z-10 min-h-screen">
 				<div className="container mx-auto px-4 pt-20 pb-12 sm:px-6 sm:pt-24 lg:px-8 lg:pb-16">
-					<div className="mx-auto mb-8 max-w-3xl text-center sm:mb-12">
-						<h1 className="text-3xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-							Todos los Proyectos
-						</h1>
-						<p className="mt-3 text-sm leading-relaxed text-white/68 sm:mt-4 sm:text-base">
-							Una coleccion completa de mis trabajos y proyectos, optimizada
-							para explorarse con comodidad en movil, tablet y escritorio.
-						</p>
-					</div>
-
 					<div className="grid grid-cols-1 gap-4 min-[560px]:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
 						{works.map((project) => (
 							<button

@@ -31,16 +31,6 @@ export default function CertificadosPage() {
 
 			<div className="relative z-10 min-h-screen">
 				<div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-12">
-					<h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-3 sm:mb-4 text-white">
-						Certificados
-					</h1>
-					<p className="text-center text-muted-foreground mb-8 sm:mb-12 text-sm sm:text-base">
-						Una coleccion de mis certificaciones y logros profesionales
-					</p>
-					<p className="mb-6 text-center text-xs font-medium uppercase tracking-[0.28em] text-white/60 sm:mb-10">
-						{CERTIFICATES.length} certificados disponibles
-					</p>
-
 					<div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
 						{CERTIFICATES.map((cert) => (
 							<a
