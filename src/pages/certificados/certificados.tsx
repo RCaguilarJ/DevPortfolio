@@ -20,7 +20,15 @@ const CERTIFICATES = [
 		title: "Desarrollo con IA",
 		image: "/certificados/desarrollo-con-ia.jpeg",
 	},
+	{
+		id: 15,
+		title: "Ciberseguridad y Hacking Etico",
+		image: "/certificados/cursoCiberseguridaad.jpeg",
+	},
 ];
+
+const getCertificateFormat = (image: string) =>
+	image.split(".").pop()?.toUpperCase() ?? "IMG";
 
 export default function CertificadosPage() {
 	return (
@@ -54,7 +62,7 @@ export default function CertificadosPage() {
 										{cert.title}
 									</h2>
 									<span className="shrink-0 rounded-full border border-white/25 bg-black/35 px-2 py-1 text-[11px] font-medium uppercase tracking-[0.2em] text-white/90 backdrop-blur-sm">
-										JPG
+										{getCertificateFormat(cert.image)}
 									</span>
 								</div>
 
